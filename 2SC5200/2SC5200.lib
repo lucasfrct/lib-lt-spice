@@ -1,0 +1,38 @@
+************ Power Discrete BJT Electrical Parameters ***************
+** Product: 2SC5200
+** Package: TO-264
+** Audio Power Amplifier (Complement to FJL4215/2SA1943)
+**-------------------------------------------------------------------
+
+.subckt 2SC5200 1 2 3
+q1 1 2 3 F1943
+.model F5200 NPN
++ IS  = 3.0463E-11       BF  = 96.20           VAF = 100
++ IKF = 15.04256         ISE = 5.6190E-11      NE  = 2.0
++ BR  = 4.849            IKR = 1.05012         VAR = 100
++ ISC = 7.18E-8          NC  = 1.5             RE  = 0.0025
++ RB  = 20.18            RBM = 0.0014          IRB = 1.0E-7
++ RC  = 0.01137          CJE = 4.5000E-10      CJC = 8.4915E-10        
++ VJC = 0.68977          MJC = 0.54081         TF  = 6.8583E-10       
++ XTF = 9.5721           VTF = 10.425          ITF = 6.8697E-2       
++ TR  = 1.000E-8         XTB = 1.45            EG  = 0.82
++ FC  = 0.5
+.ends F5200
+***************** Power Discrete Bipolar Thermal Model ****************
+.subckt SC5200_Thermal TH TL
+CTHERM1 TH 6 1.84e-3
+CTHERM2 6 5  4.24e-3
+CTHERM3 5 4  4.62e-3
+CTHERM4 4 3  6.24e-3
+CTHERM5 3 2  7.02e-2
+CTHERM6 2 TL 8.02e-2
+RTHERM1 TH 6 2.30e-3
+RTHERM2 6 5  1.10e-2
+RTHERM3 5 4  1.70e-2
+RTHERM4 4 3  2.00e-1
+RTHERM5 3 2  2.40e-1
+RTHERM6 2 TL 3.50e-1
+.ends SC5200_Thermal 
+**-------------------------------------------------------------------
+** Creation: Mar.-11-2008   Rev: 0.0
+** Fairchild Semiconductor

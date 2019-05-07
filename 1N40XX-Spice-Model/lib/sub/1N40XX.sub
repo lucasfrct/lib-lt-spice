@@ -1,0 +1,111 @@
+*//////////////////////////////////////////////////////////////////////
+* Models developed by:
+* Lucas Costa | lucasfrct@gmail.com *
+*//////////////////////////////////////////////////////////////////
+*
+*				|\
+* 		A ______| \|______ K
+*	   (N+)		| /|	  (N-)
+*				|/ 
+*
+*DX 	Anode (A)	Cathode (k) 	NAME
+*D1 	1 			2 				1N4001
+*.model 1N4001 	D( Is=1 Rs=1... )
+*
+* If:      Corrente típica conduzindo
+* Ir:      Corrente quando polaridado reversamente
+* Ifsm:    Corrente de surto conduzindo
+* Vrrm:    Tensão reversa limite para conduzir
+* Vrms:    Tensão máxima de polarização direta
+* Vf:      Tensão conduzindo a corrente de If
+* Tj(máx): Temperatura máxima na junção
+*
+* If....(Irms) (Iave)
+* Ir....(Is) (Revilimit) (Ibv)
+* Ifsm..(Ilimit) (Ipk)
+* Vrrm..(Bv) (Vrev)
+* Vrms..(Vpk)
+* Vf....(Eg)
+*
+*////////////////////////////////////////////////////////////////////////////////////////
+*////////////////////////////////////////////////////////////////////////////////////////
+*
+* Vfwd:       Tensão limite para entrar na zona de condução (conduzindo)
+* Vrev:       Tensão limite de ruptura /saturação reversa (transisção de cortado para conduzindo)
+* Bv:         Tensão limite de ruptura /saturação reversa (transisção de cortado para conduzindo)
+* Vpk:        Tensão de Pico
+*
+* Ilimit:     Limite de corrente conduzindo
+* Iave:       Corrente média conduzindo
+* Irms:       Corrente média em RMS
+* Revilimit:  Limite de corernte reversa  (conduzindo na região de ruptura/ saturação)
+* Ibv:        Limite de corernte reversa  (conduzindo na região de ruptura/ saturação)
+* Is:         Corrente de saturação (corrente conduzindo reversamente)
+* Ipk:        Corrente de pico em surto
+*
+* Epsilon:    Largura da região quadrática após o limite de condução (região de subida)
+* Revepsilon: Largura da região quadrática após o limite da ruptura /saturação (região de descida)
+*
+* Ron:  Resistência do diodo conduzindo
+* Roff: Resistência do diodo cortado
+* Rrev: Resistência do diodo conduzindo reversamente (em ruptura / saturação)
+* Rs:   Resistência de saturãção (resistencia conduzindo reversamente)
+*
+* Cjo:  Zero-bias da junção - capacitância do diodo a 0 V 
+* Vj:   potencial de junção
+* Vp:   recuperação reversa suave (amortece a carga do diodo)
+* Diss: Máxima dissipação
+*
+*
+**************************************************************************
+**************************************************************************
+*
+*1N4001 - 1N4007 Vishay General Semiconductor
+*General Purpose Plastic Retifier
+*DO-204Al (DO-41)
+*Low voltage Drop
+*Low leakege current
+*High forward surge capability
+*Diodes Si If 1.0A Vrrm 50-1000V Ifsm 30A Vf 1.1V Ir 5.0uA Tjmax 150º f 1MHz Tt=1u
+*
+*** 1N4001 35V ***********************************************************************************
+.subckt 1N4001 	1 	2 
+D1 	1	2 D1N4001	
+.model D1N4001 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=50 Vrev=50 Vpk=35 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4001
+
+*** 1N4002 70V ***********************************************************************************
+.subckt 1N4002	1 	2
+D1 	1	2	D1N4002
+.model D1N4002 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=100 Vrev=100 Vpk=70 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4002
+*
+*** 1N4003	140V ********************************************************************************
+.subckt 1N4003	1	2
+D1 	1	2	D1N4003
+.model D1N4003 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=200 Vrev=200 Vpk=140 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4003
+*
+*** 1N4004 280V ***********************************************************************************
+.subckt 1N4004	1	2
+D1 	1	2	D1N4004
+.model D1N4004 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=400 Vrev=400 Vpk=280 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4004
+*
+*** 1N4005 420V **********************************************************************************
+.subckt 1N4005 	1	2
+D1 	1	2	D1N4005
+.model D1N4005 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=600 Vrev=600 Vpk=420 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4005
+*
+*** 1N4006 560V ***********************************************************************************
+.subckt 1N4006	1	2
+D1 	1	2	D1N4006
+.model D1N4006 D (Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=800 Vrev=800 Vpk=560 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4006
+*
+*** 1N4007 700V *************************************************************************************
+.subckt 1N4007 	1	2
+D1 	1	2	D1N4007
+.model D1N4007 D(Mfg=Vishay type=Rectifier Irms=1.0 Iave=1.0 Is=30u Revilimit=30u Ibv=30u Ilimit=30.0 Ipk=30.0 Bv=1K Vrev=1k Vpk=700 Eg=1.11 Epsilon=0.7 Revepsilon=0.6 N=1.78309 Rs=0.0414388 Xti=3 Cjo=28.173p Vj=0.50772 M=0.3188974 Fc=0.5 Tt=9.85376u Af=1 Kf=0)
+.ends 1N4007

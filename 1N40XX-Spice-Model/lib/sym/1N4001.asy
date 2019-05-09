@@ -15,7 +15,7 @@ SYMATTR 1N4001
 SYMATTR Value 1N4001
 SYMATTR Value2 1N4001
 SYMATTR SpiceModel 1N40XX.sub
-SYMATTR Description Vishay General Semiconductor, General Purpose Plastic Retifier, DO-204Al (DO-41). Low voltage Drop. Low leakege current. High forward surge capability. Diodes Si, If 1.0A, Vrms 35V, Vrrm 50V Ifsm 30A Vf 1.1V Ir 5.0uA Tjmax 150º Freq 1MHz Time 1us
+SYMATTR Description Vishay General Semiconductor, General Purpose Plastic Retifier, DO-204Al (DO-41). Low voltage Drop. Low leakege current. High forward surge capability. Diodes Si, If 1.0A, Vrms 35V, Vrrm 50V Ifsm 30A Vf 1.1V Ir 5.0uA Tjmax 150º Freq 1MHz.
 *
 PIN 16 0 NONE 0
 PINATTR PinName +

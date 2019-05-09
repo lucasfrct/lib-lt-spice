@@ -1,7 +1,17 @@
+*//////////////////////////////////////////////////////////////////////
+* Models developed by:
+* Lucas Costa | lucasfrct@gmail.com
+* Model format: SPICE3
+* Model generated on May 2019
+*//////////////////////////////////////////////////////////////////
 ************ Power Discrete BJT Electrical Parameters ***************
-** Product: 2SC5200
+** Product: 2SC5200/FJL4315
 ** Package: TO-264
-** Audio Power Amplifier (Complement to FJL4215/2SA1943)
+** Audio Power Amplifier (Complement to 2SA1943/FJL4215)
+** Farchild Semiconductor
+** NPN Epitaxial Silicon Transistor Bipolar Junction (TO-264). 
+** High Voltage. Low Noise. Transistor Bipolar Si
+** Ic 15A, Ib 1.5A, Vcb 230V, Vce 230V, Veb 5V, Hfe 60, Cob 360pF, Tjmax 150º Freq, 30MHz
 **-------------------------------------------------------------------
 * connections:    
 *				(C) Collector
@@ -10,7 +20,7 @@
 *				|   |   |
 .subckt 2SC5200 1 	2 	3
 q1 1 2 3 Q2SC5200
-.model Q2SC5200 NPN ( IS = 3.0463E-11 BF  = 96.20 VAF = 100 IKF = 15.04256 ISE = 5.6190E-11 NE  = 2.0 BR  = 4.849 IKR = 1.05012 VAR = 100 ISC = 7.18E-8 NC  = 1.5 RE  = 0.0025 RB  = 20.18  RBM = 0.0014 IRB = 1.0E-7 RC  = 0.01137 CJE = 4.5000E-10 CJC = 8.4915E-10 VJC = 0.68977 MJC = 0.54081 TF  = 6.8583E-10 XTF = 9.5721 VTF = 10.425 ITF = 6.8697E-2 TR  = 1.000E-8 XTB = 1.45 EG  = 0.82 FC  =  0.5 )
+.model Q2SC5200 NPN (Mfg=Farchild type=Audio Power Amplifier IS = 3.0463E-11 BF  = 96.20 VAF = 100 IKF = 15.04256 ISE = 5.6190E-11 NE  = 2.0 BR  = 4.849 IKR = 1.05012 VAR = 100 ISC = 7.18E-8 NC  = 1.5 RE  = 0.0025 RB  = 20.18  RBM = 0.0014 IRB = 1.0E-7 RC  = 0.01137 CJE = 4.5000E-10 CJC = 8.4915E-10 VJC = 0.68977 MJC = 0.54081 TF  = 6.8583E-10 XTF = 9.5721 VTF = 10.425 ITF = 6.8697E-2 TR  = 1.000E-8 XTB = 1.45 EG  = 0.82 FC  =  0.5)
 .ends 2SC5200
 ***************** Power Discrete Bipolar Thermal Model ****************
 .subckt 2SC5200_Thermal TH TL
@@ -26,7 +36,4 @@ RTHERM3 5 4  1.70e-2
 RTHERM4 4 3  2.00e-1
 RTHERM5 3 2  2.40e-1
 RTHERM6 2 TL 3.50e-1
-.ends 2SC5200_Thermal 
-**-------------------------------------------------------------------
-** Creation: Mar.-11-2008   Rev: 0.0
-** Fairchild Semiconductor
+.ends 2SC5200_Thermal

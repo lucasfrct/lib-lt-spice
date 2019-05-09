@@ -16,7 +16,7 @@ SYMATTR 2SC5200
 SYMATTR Value 2SC5200
 SYMATTR Value2 2SC5200
 SYMATTR SpiceModel 2SC5200.sub
-SYMATTR Description Farchild Semiconductor, NPN Epitaxial Silicon Transistor Bipolar Junction (TO-264). High Voltage. Low Noise. Transistor Bipolar Si, Ic 15A, Vcb 230V, Vce 230V, Veb 5V, Hfe 60, Cib 9pF, Cob 360pF, Tjmax 150º Freq, 30MHz
+SYMATTR Description Farchild Semiconductor, NPN Epitaxial Silicon Transistor Bipolar Junction (TO-264). High Voltage. Low Noise. Transistor Bipolar Si, Ic 15A, Vcb 230V, Vce 230V, Veb 5V, Hfe 60, Cib 9pF, Tjmax 150º Freq, 30MHz
 *
 PIN 64 0 NONE 0
 PINATTR PinName C

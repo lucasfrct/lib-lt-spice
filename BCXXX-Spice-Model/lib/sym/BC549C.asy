@@ -12,11 +12,11 @@ WINDOW 3 56 68 Left 2
 *
 SYMATTR Prefix X
 SYMATTR instName Q
-SYMATTR BC548
-SYMATTR Value BC548
-SYMATTR Value2 BC548
+SYMATTR BC549C
+SYMATTR Value BC549C
+SYMATTR Value2 BC549C
 SYMATTR SpiceModel BCXXX.sub
-SYMATTR Description Farchild Semiconductor, NPN Epitaxial Silicon Transistor Bipolar Junction (TO-92). High Voltage. Low Noise. Transistor Bipolar Si, Ic 100mA, Ib 15nA, V(cb) 30V, V(ce) 30V, V(eb) 5V, Hfe 800, Tjmax 150º Freq, 300MHz
+SYMATTR Description Farchild Semiconductor, NPN Epitaxial Silicon Transistor Bipolar Junction (TO-92). High Voltage. Low Noise. Transistor Bipolar Si, Ic 100mA, Ib 15nA, V(cb) 30V, V(ce) 30V, V(eb) 5V, Hfe 800, P 500mW, Tjmax 150º Freq, 300MHz
 *
 PIN 64 0 NONE 0
 PINATTR PinName C

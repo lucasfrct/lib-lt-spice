@@ -16,7 +16,7 @@ SYMATTR TIP147
 SYMATTR Value TIP147
 SYMATTR Value2 TIP147
 SYMATTR SpiceModel TIPXXX.sub
-SYMATTR Description Farchild Semiconductor, PNP Monolithic Construction with Built In Base-Emitter Shunt Reistors (TO-3P). High Voltage. Low Noise. Transistor Bipolar Si, Ic 10A, Ib 0.5A, Vcb 100V, Vce 100V, Veb 5V, Hfe 500, Cib 9pF, Cob 6pF, Tjmax 150º Freq, 100MHz
+SYMATTR Description Farchild Semiconductor, PNP Monolithic Construction with Built In Base-Emitter Shunt Reistors (TO-3P). High Voltage. Low Noise. Transistor Bipolar Si, Ic 10A, Ib 0.5A, Vcb 100V, Vce 100V, Veb 5V, Hfe 500, Tjmax 150º Freq, 100MHz
 *
 PIN 64 0 NONE 0
 PINATTR PinName C

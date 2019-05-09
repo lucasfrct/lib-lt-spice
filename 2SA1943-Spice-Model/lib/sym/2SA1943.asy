@@ -16,7 +16,7 @@ SYMATTR 2SA1943
 SYMATTR Value 2SA1943
 SYMATTR Value2 2SA1943
 SYMATTR SpiceModel 2SA1943.sub
-SYMATTR Description Farchild Semiconductor, PNP Epitaxial Silicon Transistor Bipolar Junction (TO-264). High Voltage. Low Noise. Transistor Bipolar Si, Ic 15A, Ib 1.5A, Vcb 230V, Vce 230V, Veb 5V, Hfe 60, Cob 360pF, Tjmax 150º Freq, 30MHz
+SYMATTR Description Farchild Semiconductor, PNP Epitaxial Silicon Transistor Bipolar Junction (TO-264). High Voltage. Low Noise. Transistor Bipolar Si, Ic 15A, Ib 1.5A, Vcb 230V, Vce 230V, Veb 5V, Hfe 60, Tjmax 150º Freq, 30MHz
 *
 PIN 64 0 NONE 0
 PINATTR PinName C

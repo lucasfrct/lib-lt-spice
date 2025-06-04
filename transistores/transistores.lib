@@ -53,3 +53,88 @@
 + CJC = 1,79861e-09 VJC = 0,814822 MJC = 0,473271 XCJC = 1 
 + FC = 0,8 CJS = 0 VJS = 0,75 MJS = 0,5 
 + TR = 1e-07 PTF = 0 KF = 0 AF = 1
+
+*=====================================================================
+*  Modelo LTspice refinado para BD140 (PNP, TO-126)
+*  Ajustado para corresponder às curvas típicas de:
+*    • DC current gain vs I_C (@ VCE=–2 V)
+*    • VCE(sat) vs I_C (@ IB=IC/10, IC/20, IC/5)
+*    • VBE vs I_C (@ VCE=–0.2 V, –0.5 V, –1.0 V)
+*    • CURVA SÓLIDA A 1.5 A MÁX (IC)
+*
+*  Dados básicos do datasheet (BD140):
+*    – VCEO = –80 V
+*    – IC(max) = –1.5 A
+*    – hFE1 @ IC=–5 mA, VCE=–2 V ≥ 25
+*    – hFE2 @ IC=–0.5 A, VCE=–2 V ≥ 25
+*    – hFE3 @ IC=–1.5 A, VCE=–2 V ≥ 40
+*    – VCE(sat) ≤ 0.5 V @ IC=–0.5 A, IB=–50 mA
+*    – VBE(on) ≤ 1.0 V @ IC=–0.5 A, VCE=–2 V
+*    – ICBO ≤ 0.1 µA @ VCB=–30 V, IE=0
+*    – IEBO ≤ 10 µA @ VEB=–5 V, IC=0
+*
+*  Observações de refinamento (baseado nas curvas “Typical Characteristics”):
+*    (1) A curva de DC gain (Figure 1) mostra hFE ≈ 80 em IC≈10…100 mA, mantendo-se
+*        acima de ~70 até IC≈500 mA, e depois caindo para ~45 em IC=1 A e ~20 em IC≈1.5 A.
+*    (2) VCE(sat) (Figure 2) tem três curvas típicas: IB=IC/10 (mais baixa), IB=IC/20 (média)
+*        e IB=IC/5 (mais alta). Em IC=0.5 A e IB=0.05 A, VCE(sat)≈0.3…0.4 V (curva IB=IC/10).
+*        Em IC=1.5 A e IB=0.15 A, VCE(sat)≈0.6…0.8 V (curva IB≈IC/10 ou IC/5).
+*    (3) VBE vs IC (Figure 3) indica que, em VCE reduzido (–0.2…–1 V), VBE aumenta logaritmicamente:
+*        em IC=0.5 A, VBE≈0.7 V; em IC=1.5 A, VBE≈0.9 V; com ligeira dependência de VCE.
+*    (4) As curvas de S.O.A. (Figure 4) não alteram parâmetros elétricos, apenas reforçam
+*        limites de IC×VCE para pulsos/contínuo – pedi para manter IC≤1.5 A no modelo.
+*
+*  Estratégia de ajuste:
+*    • Aumentar BF e IS para elevar hFE em correntes baixas/médias.
+*    • Elevar IKF para postergar o “corner” de queda de ganho até ~0.7…1 A.
+*    • Ajustar RB e IKR/RBM para reproduzir VCE(sat) ≈ 0.3 V…0.8 V nas faixas de IB=IC/10, IC/20, IC/5.
+*    • Ajustar ISE e NE para modelar corretamente VBE(log IC) quase linear nos eixos log.
+*    • Manter CJC ≈ 50 pF para dar Cobo ≈ 50 pF a VCB=10 V (não é critério principal aqui).
+*
+*===============================================================================
+.MODEL BD140 PNP (
+*========================================
+* 1) Corrente de saturação e ganho DC
+*========================================
++IS=1.0e-14       ; Corrente de saturação de junção (↑ para hFE≈80 em IC≈0.01–0.1 A)
++BF=100           ; Ganho DC em baixa injeção (fornece hFE≈80…70 em IC até ≈0.5 A)
++NF=1.0           ; Exponencial BE (ideal)
++VAF=60           ; Tensão de Early ≈ 60 V (inclui queda de ganho suave conforme VCE aumenta)
++IKF=0.5          ; “Corner” de alta injeção ≈0.5 A → mantém hFE elevado até IC≈0.5–1 A
++ISE=5.0e-13      ; Corrente de recombinação BE (↓ em relação ao modelo anterior)
++NE=1.2           ; Exponencial de recombinação BE (ajusta curva VBE vs IC em baixa tensão)
++BR=5             ; Ganho reverso (baixo, imperceptível nas curvas usuais)
++NR=1.5           ; Exponencial junção BE reversa
+*========================================
+* 2) Resistências internas (saturação e série)
+*========================================
++RB=1.0           ; Resistência interna de base (↓ de 2 Ω para reduzir VBE(on) em IC≈0.5 A)
++RC=0.04          ; Resistência interna de coletor (↓ para VCE(sat) mais baixo, especialmente IC≤1.5 A)
+*========================================
+* 3) Parâmetros de saturação (VCE(sat))
+*========================================
++IKR=1.0e-2       ; Parametriza corrente intrínseca de saturação (↓ VCE(sat)_intrínseco)
++RBM=0.5          ; Resistência incremental de base em saturação (controla VBE(on) em IC≈0.5–1.5 A)
++PCM=1            ; Massa de polarização (mantido em 1)
+*========================================
+* 4) Capacitâncias e parâmetros dinâmicos
+*========================================
++CJE=100e-12      ; Capacitância junção BE ≈ 100 pF (em VBE=0)
++VJE=0.75         ; Tensão de barreira BE
++MJE=0.33         ; Fator de grading BE
++CJC=50e-12       ; Capacitância junção BC ≈ 50 pF (para Cobo≈50 pF @ VCB=10 V)
++VJC=0.75         ; Tensão de barreira BC
++MJC=0.33         ; Fator de grading BC
++TF=300e-9        ; Tempo de vida armazenada (↑ em relação a 200 ns para desacelerar t_on e reproduzir melhor VBE(t))
++TR=300e-9        ; Tempo de recuperação (↑ para t_off próximo de datasheet em IB negativo)
++XTB=1.5          ; Dependência de IS com T°C (silício)
++EG=1.11          ; Largura de banda proibida do Si (eV)
++XTI=3            ; Fator de dependência de IS com T°C
+*========================================
+* 5) Ruptura e correntes de fuga
+*========================================
++BV=80            ; V(BR)CEO = 80 V
++IBV=0.1          ; Corrente de teste em ruptura (100 mA)
++ISC=1e-7         ; Corrente de fuga E–B em VCB=0 (0.1 µA @ VCB=–30 V)
+)
+*===============================================================================

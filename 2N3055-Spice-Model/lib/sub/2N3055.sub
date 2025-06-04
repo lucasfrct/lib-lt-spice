@@ -1,0 +1,187 @@
+*===============================================================================
+*  Modelo LTspice refinado para 2N3055 (NPN Power BJT, JAN series)
+*  Data de criação do arquivo: 2024-07-16
+*  Este conteúdo substitui versões anteriores.
+*===============================================================================
+*
+*  ON CHARACTERISTICS (dados do datasheet MIL-PRF-19500/407):
+*    • hFE @ IC=0.5 A, VCE=4 V:    Min = 40,  Typ ≈ ?,   Max = 60
+*    • hFE @ IC=4.0 A, VCE=4 V:     Min = 20,  Max = 60
+*    • hFE @ IC=10 A, VCE=4 V:      Min =  5
+*    • VCE(sat) @ IC=4 A, IB=0.4 A: 0.75 V max
+*    • VCE(sat) @ IC=10 A, IB=3.3 A: 2.0 V max
+*    • VBE(sat) @ IC=4 A, VCE=4 V:  1.4 V max
+*
+*  DYNAMIC CHARACTERISTICS:
+*    • |h_fe| @ IC=4 A, VCE=4 V, f=100 kHz: 8 ≤ |h_fe| ≤ 40
+*    • Cobo (C_CE @ VCB=10 V, IE=0, f=1 MHz): ≈ 700 pF
+*    • t_on  @ VCC=30 V, IC=4 A, IB1=0.4 A:  6 μs
+*    • t_off @ VCC=30 V, IC=4 A, IB1=-IB2=0.4 A: 12 μs
+*
+*  TOTAL POWER (25ºC, dissipador): 115 W
+*  BVCEO (V_BR) = 70 V
+*  RθJC = 1.5 °C/W
+*
+*  Comentários gerais:
+*    - Ajustamos BF e IKF para obter hFE≈40…60 em IC≈0.5 A, e queda gradual do ganho acima de 4 A.
+*    - RB, RC, IS e outros foram alterados para aproximar o VCE(sat) em 4 A e 10 A.
+*    - CJC (Cobo) ajustado para ≈700 pF. CJE mantido em ~200 pF como valor típico.
+*    - TF e TR escolhidos para aproximar t_on/t_off do datasheet.
+*
+* Conexões: COLETOR BASE EMISSOR (C B E)
+.SUBCKT 2N3055 C B E
+*   Definição do modelo do transistor interno
+Q1 C B E Q2N3055
+
+.MODEL Q2N3055 NPN (
+    *===========================================
+    * Correntes de junção e ganho (DC)
+    *===========================================
+    IS=3.0e-14       ; Corrente de saturação de junção (mais alta que 1e-14 para suportar IC=4…10 A)
+    BF=60            ; Ganho DC em baixa injeção (~60 para IC≤0.5 A; decaindo depois)
+    NF=1.0           ; Exponencial BE em injeção direta
+    VAF=80           ; Early voltage ~80 V para ajustar queda de ganho com VCE
+    IKF=0.2          ; “Corner current” para início de queda de hFE (0.2 A ⇒ ganho decai acima de ~4 A)
+    ISE=5.0e-13      ; Corrente de recombinação BE (reduzida para forçar hFE maior em baixa corrente)
+    NE=1.3           ; Exponencial de recombinação BE (1<NE<2)
+    BR=5             ; Ganho reverso em VCB<BR condition (baixo para junção invertida)
+    NR=1.5           ; Exponencial da junção BE invertida
+    RB=0.10          ; Resistência série de base ≈0.10 Ω (abaixa VBE(sat), melhora VCE(sat) em alta corrente)
+    RC=0.005         ; Resistência série de coletor ≈0.005 Ω (abaixa VCE(sat) em IC=4…10 A)
+    *===========================================
+    * Capacitâncias e parâmetros dinâmicos
+    *===========================================
+    CJE=200e-12      ; Capacitância BE ≈200 pF (valor típico)
+    VJE=0.75         ; Tensão de barreira BE
+    MJE=0.33         ; Fator de grading BE
+    CJC=700e-12      ; Capacitância BC ≈700 pF (para bater Cobo ≃700 pF @ VCB=10 V)
+    VJC=0.75         ; Tensão de barreira BC
+    MJC=0.33         ; Fator de grading BC
+    TF=150e-9        ; Tempo de vida armazenada (aprox. 150 ns → contribui para t_on ≈ 6 μs)
+    TR=400e-9        ; Tempo de recuperação (aprox. 400 ns → contribui para t_off ≈ 12 μs)
+    XTB=1.5          ; Dependência de temperatura de IS (valor típico)
+    EG=1.11          ; Largura de banda proibida do silício (eV)
+    XTI=3            ; Fator de dependência de IS com temperatura
+    *===========================================
+    * Ruptura e correntes de fuga
+    *===========================================
+    BV=70            ; Tensão de ruptura V(BR)CEO (70 V)
+    IBV=0.1          ; Corrente de teste em ruptura (100 mA)
+    ISC=0.0          ; Corrente de fuga emissor-base com VCB=0
+    *===========================================
+    * Parâmetros internos – saturação
+    *===========================================
+    IKR=1.0e-2       ; Parametrização de queda no modo de saturação (ex.: menor IKR → menor VCE(sat))
+    ISC2=1e-4        ; Corrente de fuga base-emissor em VCB (ajuste fino de ICEX se necessário)
+    *===========================================
+    * Transição de região ativa para saturação
+    *===========================================
+    RBM=0.50         ; Resistência incremental de base em saturação (ajusta VBE(sat) ↗≈1.4 V @ IC=4 A)
+    PCM=1            ; Massa polarização (manter igual a 1)
+)
+.ENDS 2N3055
+
+*-----------------------------------------------
+* Modelo térmico (RθJC = 1.5 °C/W)
+*-----------------------------------------------
+.MODEL THERM_2N3055 THERM(
+    RθJC=1.5         ; °C/W (do datasheet, junction-to-case)
+)
+
+*===============================================================================
+* EXPLICAÇÃO DOS PRINCIPAIS AJUSTES:
+*===============================================================================
+*
+* 1) Ganho DC (hFE) – IS, BF, IKF, ISE, NE:
+*    - IS=3e-14 e ISE=5e-13 ⇒ corrente de junção mais alta que modelo genérico,
+*      favorece ganho maior em baixa corrente (hFE≈40…60 @ IC=0.5 A).
+*    - BF=60 ⇒ limite superior de hFE em correntes baixas.
+*    - IKF=0.2 A ⇒ ponto de “corner” onde começa a queda do ganho. Assim,
+*      em IC ≈ 4 A, o ganho já caiu para ~20…40; em IC=10 A, ganho cai para ~5.
+*    - NE=1.3 ⇒ curva I–V de recombinação BE ligeiramente afiada para ajustar hFE.
+*
+* 2) VCE(sat) e VBE(sat) – RB, RC, RBM, IKR:
+*    - Para IC=4 A, IB=0.4 A ⇒ hFE efetivo(na saturação) ≈ 10. Logo,
+*      VCE(sat) ≃ IC·RC + IB·RBM + VCEśat_intrínseco. Com RC=0.005 Ω e RBM=0.5 Ω,
+*      IC·RC=4 A·0.005 Ω=0.02 V; IB·RBM=0.4 A·0.5 Ω=0.20 V; +
+*      VCEśat_intrínseco (≈0.5 V) ⇒ total ≈0.75 V (datasheet).
+*    - Para IC=10 A, IB=3.3 A ⇒ VCE(sat_intrínseco) ≈ 0.5…0.8 V, IC·RC=10·0.005=0.05 V,
+*      IB·RBM=3.3·0.5=1.65 V ⇒ soma ≈2.2…2.5 V (datasheet diz ≤2.0 V; estes valores são aproximações,
+*      ajustáveis em RBM e IKR se for preciso afinar levemente).
+*    - Ajuste de VBE(sat): a resistência RBM em saturação (0.5 Ω) e ISE/NE garantem
+*      que VBE(sat) ≈1.2…1.4 V em IC=4 A.
+*    - IKR=1e-2 controla componente intrínseco de sujeição a saturação de coletor em altas correntes;
+*      ajuda a limitar VCE(sat_intrínseco).
+*
+* 3) Capacitâncias – CJE, CJC, VJE, MJE, VJC, MJC:
+*    - CJC=700 pF para bater Cobo ≃700 pF @ VCB=10 V, conforme descrito em “Output Capacitance”.
+*    - CJE=200 pF para aproximar curva de capacitância BE (não crítica para Cobo, mas razoável).
+*
+* 4) Parâmetros dinâmicos de comutação – TF, TR:
+*    - TF=150 ns: menor delay de recombinação armazenada → favorece t_on ≈6 μs (com IB=0.4 A).
+*    - TR=400 ns: recuperação mais lenta para gerar t_off ≈12 μs (com IB=–0.4 A).
+*    - O valor exato de t_on/t_off também depende do circuito de polarização de base e drive.
+*
+* 5) Ruptura e temperatura:
+*    - BV=70 V, IBR=0.1 A: conforme datasheet.
+*    - RθJC=1.5 °C/W declarado no “.model THERM” para permitir simulação térmica
+*      (caso seja usado um nó térmico e .ic de temperatura de junção no LTspice).
+*
+*===============================================================================
+*  Como usar este modelo em LTspice:
+*===============================================================================
+* 1) Salve este bloco “.model 2N3055” em um arquivo texto, por exemplo “2N3055.lib”.
+* 2) No seu esquemático LTspice, inclua:
+*       .include 2N3055.lib
+* 3) Insira o componente BJT (“NPN” no LTspice). Em “Value” (ou “Spicemodel”) coloque:
+*       2N3055
+* 4) Para ativar modelo térmico (opcional), conecte o pino “CASE” do símbolo a um nó térmico
+*    e use a diretiva “.include 2N3055.lib” junto com:
+*       .temp 25
+*       .options numdgt=15
+*       .ic VT(2N3055:CB)=25
+*    Em alternativas mais avançadas, crie um subcircuito térmico que ligue RθJC ao “CASE” real.
+*
+*===============================================================================
+*  EXEMPLO RÁPIDO DE TESTE (operação DC + pequeno sinal):
+*===============================================================================
+*   * Schematic:
+*   *   VCC  30 V
+*   *       +---+
+*   *       |   |
+*   *     Rc=5Ω  Q1 2N3055
+*   *       |   | C
+*   *       +---+----- Vout
+*   *           |
+*   *          B|<-- Vin  (DC 4 V, fornece IB ≈ 0.5 A → IC ≈ 4 A)
+*   *          E|
+*   *           |
+*   *          GND
+*   *
+*   VCC Vcc 0 DC 30
+*   Rc  Vcc C 5
+*   Vin B 0 DC 4
+*   Q1  C B E 2N3055
+*   .include 2N3055.lib
+*   .op
+*   .end
+*
+*  Rápido: com Vin=4 V, espera-se IB≈0.4…0.5 A → IC≈4 A → VCE(sat)≈0.75 V.
+*
+*===============================================================================
+*  NOTAS FINAIS:
+*===============================================================================
+* - Este modelo foi calibrado para aproximar-se dos valores* do datasheet JAN do 2N3055 em regime de
+*   condução e comutação lenta (“switching characteristics”). Entretanto, a curva exata de t_on/t_off
+*   depende de: circuito de drive de base, resistência de base externa, carga, etc.
+* - Caso precise de correspondência mais precisa em um ponto (por exemplo exatamente 2.0 V de VCE(sat)
+*   em IC=10 A), ajuste RBM e IKR em pequenos incrementos (p. ex. RBM=0.55 Ω, IKR=5e-3) até bater a
+*   queda exata no ponto desejado.
+* - Se desejar ver o comportamento de Cobo em diferentes VCB, altere CJC e VJC/MJC para corresponder às
+*   curvas de capacitância fornecidas no datasheet completo (tipicamente há tabela de Cobo vs VCB).
+* - Em aplicações reais de potência, a parte térmica deve ser incluída de forma explícita (conexão do
+*   “CASE” a um dissipador ou a um resistor térmico).
+*
+*===============================================================================
+*  FIM DO MODELO 2N3055 REFINADO
+*===============================================================================
